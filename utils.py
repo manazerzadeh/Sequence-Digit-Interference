@@ -269,3 +269,19 @@ def check_window_around_change_press(row: pd.Series):
     return (row['IPI_Number'] in ['IPI' + str(x) for x in range(row['digitChangePos'] -2 , row['digitChangePos'] + 3)])
     
 
+
+def finger_melt_Forces(subjs_force: pd.DataFrame) -> pd.DataFrame:
+    """
+    Creates seperate row for each Finger Force in the whole experiment adding two columns, "Force_Number" determining the order of Force
+    and "Force_Value" determining the time of Force
+    """
+
+    
+    subj_force_melted = pd.melt(subjs_force, 
+                    id_vars=['state', 'timeReal', 'time', 'BN', 'TN', 'SubNum', 'group', 'hand', 'isTrain', 'seq', 'windowSize', 
+                             'digitChangePos', 'digitChangeValue', 'isError', 'timingError', 'isCross', 'crossTime', 'norm_MT'], 
+                    value_vars =  [_ for _ in subjs_force.columns if _.startswith('force')],
+                    var_name='Force_Number', 
+                    value_name='Force_Value')
+    
+    return subj_force_melted
